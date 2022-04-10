@@ -1,0 +1,93 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://ComponentParticles.gd" type="Script" id=1]
+[ext_resource path="res://image/components.png" type="Texture" id=2]
+[ext_resource path="res://fade_gradient.tres" type="Texture" id=3]
+
+[sub_resource type="CanvasItemMaterial" id=2]
+particles_animation = true
+particles_anim_h_frames = 10
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="Curve" id=3]
+max_value = 1024.0
+_data = [ Vector2( 0, 1024 ), 0.0, -34350.6, 0, 0, Vector2( 0.087108, 0 ), -248.531, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=4]
+curve = SubResource( 3 )
+
+[sub_resource type="ParticlesMaterial" id=1]
+lifetime_randomness = 1.0
+flag_disable_z = true
+spread = 180.0
+gravity = Vector3( 0, 0, 0 )
+initial_velocity = 500.0
+initial_velocity_random = 0.5
+angular_velocity_curve = SubResource( 4 )
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+damping = 1000.0
+angle = 720.0
+angle_random = 1.0
+color_ramp = ExtResource( 3 )
+anim_offset = 1.0
+anim_offset_random = 1.0
+
+[sub_resource type="ParticlesMaterial" id=10]
+lifetime_randomness = 1.0
+flag_disable_z = true
+spread = 180.0
+gravity = Vector3( 0, 0, 0 )
+initial_velocity = 500.0
+initial_velocity_random = 1.0
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+damping = 1000.0
+color_ramp = ExtResource( 3 )
+
+[node name="ComponentParticles" type="Node2D"]
+z_index = -1
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Particles2D" type="Particles2D" parent="."]
+material = SubResource( 2 )
+emitting = false
+amount = 5
+lifetime = 10.0
+one_shot = true
+explosiveness = 1.0
+process_material = SubResource( 1 )
+texture = ExtResource( 2 )
+
+[node name="Particles2D2" type="Particles2D" parent="."]
+material = SubResource( 2 )
+scale = Vector2( -1, 1 )
+emitting = false
+amount = 5
+lifetime = 10.0
+one_shot = true
+explosiveness = 1.0
+process_material = SubResource( 1 )
+texture = ExtResource( 2 )
+
+[node name="Particles2D3" type="Particles2D" parent="."]
+emitting = false
+amount = 100
+one_shot = true
+explosiveness = 1.0
+randomness = 1.0
+process_material = SubResource( 10 )
+
+[node name="RemovalTimer" type="Timer" parent="."]
+wait_time = 10.0
+one_shot = true
+autostart = true
+
+[connection signal="emitting" from="." to="Particles2D" method="restart"]
+[connection signal="emitting" from="." to="Particles2D2" method="restart"]
+[connection signal="emitting" from="." to="Particles2D3" method="restart"]
+[connection signal="timeout" from="RemovalTimer" to="." method="queue_free"]

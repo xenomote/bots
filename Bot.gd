@@ -1,6 +1,7 @@
 extends RigidBody2D
 
 export(PackedScene) var COMPONENTS
+export(PackedScene) var PROJECTILE
 
 export(Vector2) var target
 export(float) var turn
@@ -32,7 +33,7 @@ func _process(delta):
 	
 	if shoot:
 		var collision = firing.get_collision_point()
-		var components = COMPONENTS.instance()
+		var components = PROJECTILE.instance()
 		components.global_position = collision
 		get_parent().add_child(components)
 		spray.emitting = true
